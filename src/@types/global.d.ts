@@ -8,6 +8,12 @@ declare global {
         interface ProcessEnv extends z.infer<typeof valProcessEnv> { }
     }
 
+    namespace Express {
+        interface User {
+            id: string
+        }
+    }
+
     var frontend: {
         urls: Array<string>
     }

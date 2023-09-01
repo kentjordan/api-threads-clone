@@ -25,3 +25,9 @@ CREATE TABLE threads(
 	updated_at TIMESTAMP,
 	CONSTRAINT fk_userId FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE refresh_tokens(
+	user_id UUID NOT NULL PRIMARY KEY,
+	refresh_token TEXT,
+	CONSTRAINT fk_userId FOREIGN KEY (user_id) REFERENCES users(id)
+);

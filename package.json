@@ -10,6 +10,7 @@
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/passport": "^1.0.12",
+    "@types/passport-jwt": "^3.0.9",
     "bun-types": "latest",
     "prisma": "^5.2.0",
     "tsc-alias": "^1.8.7",

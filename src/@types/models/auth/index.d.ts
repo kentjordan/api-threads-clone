@@ -1,8 +1,10 @@
 import { z } from 'zod';
-import { valLogin } from "~/validators/auth";
+import { valLogin, valRefresh } from "~/validators/auth";
 
 type IAuthLoginInput = z.infer<typeof valLogin>;
+type IAuthRefreshInput = z.infer<typeof valRefresh>;
 
 export {
-    IAuthLoginInput
+    IAuthLoginInput,
+    IAuthRefreshInput
 }

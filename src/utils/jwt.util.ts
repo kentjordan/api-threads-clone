@@ -1,8 +1,5 @@
 import jwt from 'jsonwebtoken';
-
-interface IPayload {
-    id: string
-}
+import { IPayload } from '~/@types/jwt';
 
 const generateAuthdTokens = async (payload: IPayload) => {
 

@@ -5,6 +5,11 @@ const valLogin = z.object({
     password: z.string().min(8)
 }).strict();
 
+const valRefresh = z.object({
+    refresh_token: z.string()
+}).strict();
+
 export {
-    valLogin
+    valLogin,
+    valRefresh
 }

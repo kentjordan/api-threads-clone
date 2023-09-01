@@ -5,11 +5,13 @@ import { default as usersRouter } from '~/modules/users/users.router';
 import { default as threadsRouter } from '~/modules/threads/threads.router';
 import { default as authRouter } from '~/modules/auth/auth.router';
 import errorMiddleware from './middlewares/error';
+import passport from '~/middlewares/passport';
 
 const server = express();
 
 // Middlewares
 server.use(json());
+server.use(passport.initialize());
 
 // Routes
 server.use('/auth', authRouter);
