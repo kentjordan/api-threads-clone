@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { PrismaError } from "prisma-error-enum";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
+import InvalidPassword from "~/errors/InvalidPassword";
 
 const errorMiddleware = (err: unknown, req: Request, res: Response, next: NextFunction) => {
 
@@ -58,6 +59,14 @@ const errorMiddleware = (err: unknown, req: Request, res: Response, next: NextFu
     if (err instanceof ZodError) {
         const zodError = fromZodError(err);
         res.status(422).json(zodError);
+        return;
+    }
+
+    if (err instanceof InvalidPassword) {
+        res.status(400).json({
+            message: err.message,
+            type: 'Client Error',
+        });
         return;
     }
 
