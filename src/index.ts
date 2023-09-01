@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import './global';
 import express, { json } from 'express';
 import { default as usersRouter } from '~/modules/users/users.router';
 import { default as threadsRouter } from '~/modules/threads/threads.router';
