@@ -12,9 +12,8 @@ router.post('/login',
     AuthService.login
 );
 
-router.post('/refresh-token',
+router.get('/refresh-token',
     passport.authenticate('jwt-auth', { session: false }),
-    validateBody<IAuthRefreshInput>(AuthValidators.valRefresh),
     AuthService.refreshTokens
 );
 

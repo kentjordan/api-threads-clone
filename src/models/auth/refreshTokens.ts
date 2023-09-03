@@ -1,6 +1,6 @@
 import { NextFunction } from "express";
 import { generateAuthdTokens } from "~/utils/jwt.util";
-import { verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 interface IRefreshToken {
     refresh_token: string,
@@ -20,7 +20,7 @@ const refreshTokens = async (credentials: IRefreshToken, next: NextFunction) => 
 
         if (user.refresh_token) {
 
-            verify(user.refresh_token, process.env.SECRET_KEY);
+            jwt.verify(user.refresh_token, process.env.SECRET_KEY);
 
             const { access_token, refresh_token } = await generateAuthdTokens({ id: credentials.user_id });
 

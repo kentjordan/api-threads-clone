@@ -4,6 +4,7 @@ import { IRequestCustomBody } from "~/@types/request"
 import extractBody from "~/utils/extractors/extract_body"
 import * as AuthModels from "~/models/auth";
 import extractUser from "~/utils/extractors/extract_user";
+import extractUserFromTokenOnHeader from "~/utils/extractors/extractUserFromTokenOnHeader";
 
 const login = async (req: IRequestCustomBody<IAuthLoginInput>, res: Response, next: NextFunction) => {
 
@@ -19,10 +20,9 @@ const login = async (req: IRequestCustomBody<IAuthLoginInput>, res: Response, ne
 
 const refreshTokens = async (req: IRequestCustomBody<IAuthRefreshInput>, res: Response, next: NextFunction) => {
 
-    const { refresh_token } = extractBody<IAuthRefreshInput>(req);
-    const { id } = extractUser(req);
+    const { id, token } = extractUserFromTokenOnHeader(req, 'refresh');
 
-    const refreshedTokens = await AuthModels.refreshTokens({ user_id: id, refresh_token }, next);
+    const refreshedTokens = await AuthModels.refreshTokens({ user_id: id as string, refresh_token: token }, next);
 
     if (refreshedTokens) {
         res.status(200).json({ ...refreshedTokens });
