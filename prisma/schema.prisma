@@ -14,26 +14,77 @@ model refresh_tokens {
 }
 
 model threads {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id        String           @db.Uuid
+  content_text   String?
+  content_photos String[]
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?        @db.Timestamp(6)
+  thread_likes   thread_likes[]
+  thread_photos  thread_photos[]
+  thread_replies thread_replies[]
+  thread_reposts thread_reposts[]
+  users          users            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_userid")
+}
+
+model users {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  first_name     String?          @db.VarChar(128)
+  last_name      String?          @db.VarChar(128)
+  email          String?          @unique @db.VarChar(128)
+  password       String?
+  username       String?          @db.VarChar(32)
+  bio            String?          @db.VarChar(128)
+  link           String?
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?        @db.Timestamp(6)
+  refresh_tokens refresh_tokens?
+  thread_likes   thread_likes[]
+  thread_photos  thread_photos[]
+  thread_replies thread_replies[]
+  thread_reposts thread_reposts[]
+  threads        threads[]
+}
+
+model thread_likes {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  thread_id  String?   @db.Uuid
+  by_user_id String?   @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+  users      users?    @relation(fields: [by_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_by_userid")
+  threads    threads?  @relation(fields: [thread_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_threadid")
+}
+
+model thread_photos {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  thread_id  String?   @db.Uuid
+  user_id    String?   @db.Uuid
+  img_url    String[]
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_by_userid")
+  threads    threads?  @relation(fields: [thread_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_threadid")
+}
+
+model thread_replies {
   id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id        String    @db.Uuid
+  thread_id      String?   @db.Uuid
+  user_id        String?   @db.Uuid
   content_text   String?
   content_photos String[]
   created_at     DateTime? @default(now()) @db.Timestamp(6)
   updated_at     DateTime? @db.Timestamp(6)
-  users          users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_userid")
+  users          users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_by_userid")
+  threads        threads?  @relation(fields: [thread_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_threadid")
 }
 
-model users {
-  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  first_name     String?         @db.VarChar(128)
-  last_name      String?         @db.VarChar(128)
-  email          String?         @unique @db.VarChar(128)
-  password       String?
-  username       String?         @db.VarChar(32)
-  bio            String?         @db.VarChar(128)
-  link           String?
-  created_at     DateTime?       @default(now()) @db.Timestamp(6)
-  updated_at     DateTime?       @db.Timestamp(6)
-  refresh_tokens refresh_tokens?
-  threads        threads[]
+model thread_reposts {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  thread_id  String?   @db.Uuid
+  by_user_id String?   @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+  users      users?    @relation(fields: [by_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_by_userid")
+  threads    threads?  @relation(fields: [thread_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_threadid")
 }
