@@ -1,7 +1,8 @@
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
+import { IRequestCustomBody, IRequestCustomParams, IRequestCustomQuery } from '~/@types/request';
 
-const extractUserFromTokenOnHeader = (req: Request, type: 'refresh' | 'access') => {
+const extractUserFromTokenOnHeader = <T>(req: IRequestCustomBody<T> | IRequestCustomParams<T> | IRequestCustomQuery<T>, type: 'refresh' | 'access') => {
 
     const token = req.get('Authorization')?.split(' ').at(1) as string;
 
