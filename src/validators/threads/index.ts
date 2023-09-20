@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const valThreadId = z.object({
-    thread_id: z.string().min(1)
+    thread_id: z.string().uuid()
 }).strict();
 
 const valcreateThreadInput = z.object({
@@ -14,8 +14,14 @@ const valParamsUnlikeThread = z.object({
     like_id: z.string().min(1)
 }).strict()
 
+const valUpdateThreadInput = z.object({
+    content_text: z.string().min(1).optional(),
+    content_photos: z.array(z.string()).optional()
+}).strict();
+
 export {
     valcreateThreadInput,
     valThreadId,
-    valParamsUnlikeThread
+    valParamsUnlikeThread,
+    valUpdateThreadInput
 }

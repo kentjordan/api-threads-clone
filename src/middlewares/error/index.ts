@@ -9,6 +9,8 @@ import RefreshTokenError from "~/errors/RefreshTokenError";
 
 const errorMiddleware = (err: unknown, req: Request, res: Response, next: NextFunction) => {
 
+    console.log(err);
+
     if (err instanceof PrismaClientKnownRequestError) {
 
         if (err.code === PrismaError.UniqueConstraintViolation) {

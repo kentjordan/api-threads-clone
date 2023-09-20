@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { IRequestCustomParams } from '~/@types/request';
-import { IThreadCreateInput, IThreadId, IThreadUnlikePrams } from '~/@types/threads';
+import { IThreadCreateInput, IThreadId, IThreadUnlikePrams, IThreadUpdateInput } from '~/@types/threads';
 import * as ThreadModels from '~/models/threads'
 import extractReqParams from '~/utils/extractors/extractReqParams';
 import extractUserFromTokenOnHeader from '~/utils/extractors/extractUserFromTokenOnHeader';
@@ -86,7 +86,19 @@ const unlikeThreadById = async (req: IRequestCustomParams<IThreadUnlikePrams>, r
     }
 }
 
-const updateThreadsById = async (req: Request, res: Response, next: NextFunction) => {
+const updateThreadsById = async (req: IRequestCustomParams<IThreadId>, res: Response, next: NextFunction) => {
+
+    const updateInput = extractBody<IThreadUpdateInput>(req);
+    const { thread_id } = extractReqParams<IThreadId>(req);
+
+    const updatedThreads = await ThreadModels.updateThreadsById(thread_id, updateInput, next);
+
+    if (updatedThreads) {
+        res.status(200).json({
+            ...updatedThreads
+        });
+    }
+
 }
 
 const deleteThreadsById = async (req: Request, res: Response, next: NextFunction) => {
